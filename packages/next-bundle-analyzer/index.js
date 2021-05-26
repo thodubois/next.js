@@ -1,7 +1,8 @@
-module.exports = ({ enabled = true } = {}) => (nextConfig = {}) => {
+module.exports = (bundleAnalyserProps = { enabled: true }) => (nextConfig = {}) => {
   return Object.assign({}, nextConfig, {
     webpack(config, options) {
-      if (enabled) {
+      const pluginProps = typeof bundleAnalyserProps === 'function' ? bundleAnalyserProps(options) : bundleAnalyserProps
+      if (pluginProps.enabled) {
         const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
         config.plugins.push(
           new BundleAnalyzerPlugin({
@@ -9,6 +10,7 @@ module.exports = ({ enabled = true } = {}) => (nextConfig = {}) => {
             reportFilename: options.isServer
               ? '../analyze/server.html'
               : './analyze/client.html',
+              ...pluginProps,
           })
         )
       }

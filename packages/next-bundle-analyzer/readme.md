@@ -25,6 +25,18 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 module.exports = withBundleAnalyzer({})
 ```
 
+or with a funtion parameter :
+
+```js
+const withBundleAnalyzer = require('@next/bundle-analyzer')((webpackOptions) => ({
+  enabled: process.env.ANALYZE === 'true',
+  reportFilename: webpackOptions.isServer
+              ? '../analyze/server-bundle.html'
+              : './analyze/client-bundle.html',
+}))
+module.exports = withBundleAnalyzer({})
+```
+
 Or configuration as a function:
 
 ```js
